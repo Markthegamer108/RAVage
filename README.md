@@ -25,6 +25,15 @@ artifacts):
 Everything is bundled — ffmpeg, key table, the lot. Binaries are built by
 GitHub Actions (see `.github/workflows/build.yml`).
 
+### Tested hardware
+
+Verified on real hardware: **tiptoi pen gen 2 (3203L)**. Other pen
+generations use the same RAV file family, but their firmware differs — the
+key table is extracted from the pen's own firmware update (`data/keytable.bin`
+is from `Update3203L.upd`), so a gen 3 pen would need verification against
+its own stock files/firmware before trusting it. If you have one and want to
+test, the decryptor (`rav_cli.py decrypt`) is your friend.
+
 ## Quick start
 
 ### GUI (easiest)
