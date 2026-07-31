@@ -67,4 +67,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/ravage-*
+          files: |
+            dist/ravage-windows.zip
+            dist/ravage-macos.tar.gz
+            dist/ravage-linux.tar.gz
