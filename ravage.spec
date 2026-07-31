@@ -1,16 +1,16 @@
-# pyinstaller spec for rav-tool.
+# pyinstaller spec for RAVage.
 #
 # builds two executables:
-#   rav-tool  - the gui (no console window on win/mac)
-#   rav-cli   - the command line converter
+#   ravage     - the gui (no console window on win/mac)
+#   ravage-cli - the command line converter
 #
 # pyinstaller cannot cross-compile, so each binary has to be built on its
 # own OS:
-#   windows  -> rav-tool.exe + rav-cli.exe
-#   macos    -> rav-tool.app + rav-cli
-#   linux    -> rav-tool (gui, no terminal output) + rav-cli
+#   windows  -> ravage.exe + ravage-cli.exe
+#   macos    -> ravage.app + ravage-cli
+#   linux    -> ravage (gui, no terminal output) + ravage-cli
 #
-# build:  pyinstaller --noconfirm --clean rav-tool.spec
+# build:  pyinstaller --noconfirm --clean ravage.spec
 
 import sys
 
@@ -37,7 +37,7 @@ gui = EXE(
     a.binaries,
     a.datas,
     [],
-    name="rav-tool",
+    name="ravage",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -67,7 +67,7 @@ cli = EXE(
     b.binaries,
     b.datas,
     [],
-    name="rav-cli",
+    name="ravage-cli",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -80,7 +80,7 @@ cli = EXE(
 if sys.platform == "darwin":
     app = BUNDLE(
         gui,
-        name="rav-tool.app",
+        name="ravage.app",
         icon=None,
-        bundle_identifier="io.github.ravtool.rav-tool",
+        bundle_identifier="io.github.ravage.ravage",
     )

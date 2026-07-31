@@ -4,15 +4,16 @@
 # own runner. every run uploads the binaries as artifacts; pushing a tag
 # (v*) additionally attaches them to a GitHub release.
 #
-# on windows the gui becomes rav-tool.exe (no console window), the cli
-# becomes rav-cli.exe. on macos the gui becomes rav-tool.app. on linux
+# on windows the gui becomes ravage.exe (no console window), the cli
+# becomes ravage-cli.exe. on macos the gui becomes ravage.app. on linux
 # both are plain binaries.
 
 name: build
 
 on:
   push:
-    tags: ["v*"]
+    tags:
+      - "v*"
   workflow_dispatch:
 
 permissions:
@@ -41,29 +42,29 @@ jobs:
         run: pip install -r requirements-build.txt
 
       - name: Build
-        run: pyinstaller --noconfirm --clean rav-tool.spec
+        run: pyinstaller --noconfirm --clean ravage.spec
 
       - name: Package binaries
         shell: bash
         run: |
           cd dist
           if [ "$RUNNER_OS" = "Windows" ]; then
-            powershell -Command "Compress-Archive -Path rav-tool.exe, rav-cli.exe -DestinationPath rav-tool-windows.zip -Force"
+            powershell -Command "Compress-Archive -Path ravage.exe, ravage-cli.exe -DestinationPath ravage-windows.zip -Force"
           elif [ "$RUNNER_OS" = "macOS" ]; then
-            tar -czf rav-tool-macos.tar.gz rav-tool.app rav-cli
+            tar -czf ravage-macos.tar.gz ravage.app ravage-cli
           else
-            tar -czf rav-tool-linux.tar.gz rav-tool rav-cli
+            tar -czf ravage-linux.tar.gz ravage ravage-cli
           fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: rav-tool-${{ matrix.os }}
-          path: dist/rav-tool-*
+          name: ravage-${{ matrix.os }}
+          path: dist/ravage-*
           if-no-files-found: error
 
       - name: Attach to release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/rav-tool-*
+          files: dist/ravage-*

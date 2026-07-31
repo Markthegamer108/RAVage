@@ -1,4 +1,4 @@
-# RAV Tool — tiptoi `.rav` audio converter
+# RAVage — tiptoi `.rav` audio converter
 
 Convert **any audio file** (mp3, wav, m4a, flac, ogg, …) into a playable
 `.rav` file for the **Ravensburger tiptoi pen (3203L)** — and back.
@@ -13,14 +13,14 @@ pen files.
 ## Prebuilt binaries
 
 No Python needed — grab the right one for your OS from the [releases page](
-https://github.com/Markthegamer108/rav-tool/releases) (or the latest workflow run's
+https://github.com/Markthegamer108/RAVage/releases) (or the latest workflow run's
 artifacts):
 
 | OS | What you get | Notes |
 |----|--------------|-------|
-| Windows | `rav-tool-windows.zip` — `rav-tool.exe` (GUI) + `rav-cli.exe` | double-click `rav-tool.exe` |
-| macOS | `rav-tool-macos.tar.gz` — `rav-tool.app` + `rav-cli` | unsigned, so first launch: right-click → Open |
-| Linux | `rav-tool-linux.tar.gz` — `rav-tool` (GUI) + `rav-cli` | `chmod +x` if needed |
+| Windows | `ravage-windows.zip` — `ravage.exe` (GUI) + `ravage-cli.exe` | double-click `ravage.exe` |
+| macOS | `ravage-macos.tar.gz` — `ravage.app` + `ravage-cli` | unsigned, so first launch: right-click → Open |
+| Linux | `ravage-linux.tar.gz` — `ravage` (GUI) + `ravage-cli` | `chmod +x` if needed |
 
 Everything is bundled — ffmpeg, key table, the lot. Binaries are built by
 GitHub Actions (see `.github/workflows/build.yml`).
@@ -155,3 +155,12 @@ data/keytable.bin          key table extracted from firmware 3203L
 ## License
 
 MIT — free to use, study, and share.
+
+## Community
+
+This project builds on the groundwork of the
+[tip-toi-reveng](https://github.com/entropia/tip-toi-reveng) community and its
+[wiki](https://github.com/entropia/tip-toi-reveng/wiki). The RAV format was
+the last major unsolved piece — join the
+[tiptoi mailing list](https://lists.nomeata.de/mailman/listinfo/tiptoi) and
+say hi.
