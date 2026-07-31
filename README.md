@@ -1,5 +1,7 @@
 # RAVage — tiptoi `.rav` audio converter
 
+**English** · [Deutsch](README.de.md)
+
 Convert **any audio file** (mp3, wav, m4a, flac, ogg, …) into a playable
 `.rav` file for the **Ravensburger tiptoi pen (3203L)** — and back.
 
