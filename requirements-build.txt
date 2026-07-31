@@ -1,0 +1,3 @@
+# deps for building the standalone binaries (see .github/workflows/build.yml)
+pyinstaller
+imageio-ffmpeg
