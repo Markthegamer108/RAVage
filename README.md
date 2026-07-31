@@ -6,7 +6,9 @@ Convert **any audio file** (mp3, wav, m4a, flac, ogg, …) into a playable
 The RAV encryption used by the 3203L was fully reverse engineered from the
 firmware update file (`Update3203L.upd`) via Thumb-2 disassembly. Everything
 here is implemented from scratch and verified byte-exact against original
-pen files.
+pen files. As far as we can tell this is the first working implementation —
+the community had filed the format away as "serious crypto" a decade ago
+([issue #115](https://github.com/entropia/tip-toi-reveng/issues/115)).
 
 ![GUI](docs/gui.png)
 
@@ -117,6 +119,43 @@ are byte-exact round trips.
 > and it muddies playback), −4 dB gain, and a −1 dB peak limiter. The GUI
 > offers "Much softer" (−8 dB) and "Original loudness" (no processing);
 > the CLI has `--gain-db` and `--no-tame`.
+
+## How it was cracked
+
+Short version for people who enjoy the chase. No side channels, no leaked
+keys — it was all sitting in plain sight.
+
+1. **The rabbit hole.** The wiki and issue #115 (closed 2015) declared RAV
+   files encrypted with "serious crypto" and floated the idea that the key
+   might live on a per-pen chip. Nobody had broken it in ~10 years.
+
+2. **The firmware.** Ravensburger publishes the pen's firmware update
+   (`Update3203L.upd`) right on their website — a plain Cortex-M (ARM
+   Thumb-2) image, no obfuscation worth the name.
+
+3. **Find the audio path.** Search the image for the RAV magic
+   `Ravensburgerv03` → lands on the audio open function at `0x8DFE84`,
+   which calls a key generator (`0x8DF380`) and the decode loop
+   (`0x8DF3B4`).
+
+4. **The "secret" was public.** The key generator builds a 512-byte
+   keystream from `key8 = "CommonI2"` (a hardcoded string literal in the
+   firmware) plus a 4096-byte table sitting in the image at `0xDBADC`. Every
+   pen ships with its decryption key baked in — there was never a per-pen
+   secret. It's not cryptography, it's a fancy XOR with a lookup table.
+
+5. **Verify, fail, fix.** First attempts round-tripped perfectly on the PC
+   but the pen refused to play our files: the keystream index is
+   payload-relative (`pos - 0x20`), while the op selector is absolute
+   (`pos & 3`). Getting the phase wrong silently shifted the whole stream.
+   That little detail cost a couple of days.
+
+6. **The quirks.** The pen ignores Ogg page CRCs (sloppy decoder, lucky
+   for us) and rejects streams with fat Vorbis comment headers — a ~9 KB
+   YouTube-rip header fails, the ~3.6 KB stock size works.
+
+7. **Real hardware.** Old MacDonald. Olchi. Drei Chinesen. All decrypted
+   to `OggS`; custom files play on the pen. Done.
 
 ## Reverse engineering notes
 
