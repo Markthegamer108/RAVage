@@ -168,6 +168,8 @@ keys. It was all sitting in plain sight.
 - `0x8DF2FC` / `0x8DF340` are init/cleanup only, not key derivation.
 - Stock files decrypt with `key8 = b"CommonI2"` and `value16 = 0x78` on all
   four factory files; payloads are all Ogg Vorbis (mono 22050 Hz).
+    - Some pens use CommonID, apparently. Easiest to decrypt an existing file
+      and reuse its Key8
 
 ### Regenerating `data/keytable.bin`
 
