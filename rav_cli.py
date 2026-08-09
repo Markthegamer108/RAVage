@@ -40,7 +40,7 @@ def cmd_convert(args):
         payload = fh.read()
     if not args.keep_ogg:
         os.remove(tmp_ogg)
-    rav = ravcrypto.encrypt_rav(payload, table, value16=args.value16)
+    rav = ravcrypto.encrypt_rav(payload, table, value16=args.value16, key8=args.key8)
     with open(args.output, "wb") as fh:
         fh.write(rav)
     print(f"\nDone in {time.time()-t0:.1f}s -> {args.output} ({len(rav):,} bytes)")
@@ -82,6 +82,8 @@ def main():
                    help="skip the high-pass filter and limiter (original loudness)")
     p.add_argument("--value16", type=lambda s: int(s, 0), default=ravcrypto.DEFAULT_VALUE16,
                    help="header value16 (default 0x78)")
+    p.add_argument("--key8", type=lambda s: s.encode("ascii"), default=ravcrypto.KEY8,
+                   help="encryption key8 (default CommonI2)")
     p.add_argument("--keep-ogg", action="store_true", help="keep the intermediate .ogg file")
     p.add_argument("--ogg", help="path for the intermediate .ogg (with --keep-ogg)")
 
