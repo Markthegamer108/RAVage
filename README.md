@@ -46,11 +46,12 @@ on GitHub Actions (`.github/workflows/build.yml`).
 
 ### Tested hardware
 
-Verified on a real pen: **tiptoi gen 2 (3203L)** with `key8 = CommonI2`. Newer pens use the same
-RAV file family, but their firmware differs — one user reported `CommonID`
-instead of `CommonI2`. The key table comes from each pen's own firmware
-(`data/keytable.bin` is from `Update3203L.upd`), so if you have a gen 3 pen,
-test it against its own stock files first. The decryptor makes that easy:
+Verified on a real pen: **tiptoi gen 2 (3203L)** with `key8 = CommonI2`. Only the
+gen 2 pen has a player inside, so only it can play a `.rav` — gen 3 pens have no
+player at all and this tool does not apply to them. Some gen 2 pens ship with
+different firmware and report `CommonID` instead of `CommonI2`. The key table comes
+from each pen's own firmware (`data/keytable.bin` is from `Update3203L.upd`), so if
+your gen 2 pen uses a different table, test it against its own stock files first.
 
 ```
 python rav_cli.py decrypt "Old MacDonald Had a Farm.rav"   # prints key8
