@@ -390,9 +390,9 @@ select{
     <h1>Your own audio,<br>on a tiptoi pen.</h1>
 
     <p class="lede">
-      RAVage wraps an mp3, wav, m4a or flac into the <code>.rav</code> container the pen
-      actually plays, and takes stock <code>.rav</code> files apart again. The converter
-      below runs entirely in this tab — no upload, no server, no ffmpeg.
+      RAVage turns an mp3, wav, m4a or flac into a <code>.rav</code> file the pen will
+      play, and takes stock <code>.rav</code> files apart again. The converter below
+      runs entirely in this tab. No upload, no server, no ffmpeg.
     </p>
 
     <div class="hero__note">
@@ -620,9 +620,11 @@ op <span class="n">3</span>  c ^ kb</pre>
       <div class="note">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
         <div>
-          <b>Gen 2 (3203L) only, so far.</b> Newer pens use the same file family on different
-          firmware. Decrypt one of your own stock files first to see which key it wants. If
-          you have a gen 3 pen, a report is genuinely useful.
+          <b>Gen 2 (3203L) only.</b> Only the gen 2 pen has a player inside, so only it
+         can play a <code>.rav</code>. Gen 3 pens have no player at all, so this tool
+         doesn't apply to them. If your gen 2 pen runs different firmware, decrypt one
+         of your own stock <code>.rav</code> files first to see which key it wants, and
+         tell me what you find.
         </div>
       </div>
     </div>
@@ -792,8 +794,7 @@ async function convert(file, key8) {
     throw new Error('over ' + MAX_MINUTES + ' minutes — a browser runs out of memory there, use the desktop build');
   }
 
-  // same chain the CLI asks ffmpeg for: highpass 70, -4 dB, limiter at 0.891
-  // so the pen's little speaker isn't fed sub-bass it cannot reproduce
+  // the pen's speaker can't do sub-bass; highpass 70, -4 dB, limiter at 0.891
   const frames = Math.ceil(decoded.duration * TARGET_RATE);
   const off = new OfflineAudioContext(1, frames, TARGET_RATE);
   const src = off.createBufferSource();
@@ -826,8 +827,7 @@ async function convert(file, key8) {
   const enc = await createEncoder('audio/ogg', wasm);
   enc.configure({ channels: 1, sampleRate: TARGET_RATE, vbrQuality: VORBIS_QUALITY });
 
-  // encode()/finalize() hand back views into the wasm heap, which the next call
-  // reuses or invalidates when memory grows — so copy each chunk out immediately
+  // encode()/finalize() return views into wasm memory; copy before reuse
   const parts = [];
   parts.push(enc.encode([pcm]).slice());
   parts.push(enc.finalize().slice());

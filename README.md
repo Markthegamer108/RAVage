@@ -89,7 +89,7 @@ A `.rav` file is a 0x20-byte header, then an **Ogg Vorbis** audio stream
 (mono, 22050 Hz) run through a simple keyed byte transform. The pen ignores
 Ogg page CRCs, so the ciphertext doesn't need valid CRCs.
 
-### Header (20 bytes)
+### Header (32 bytes)
 
 | Offset | Size | Meaning |
 |-------:|-----:|---------|
