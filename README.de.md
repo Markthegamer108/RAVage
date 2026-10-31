@@ -39,11 +39,12 @@ von GitHub Actions (`.github/workflows/build.yml`).
 
 ### Getestete Hardware
 
-Auf echter Hardware verifiziert: **tiptoi-Stift Gen 2 (3203L)** mit `key8 = CommonI2`. Neuere
-Stifte nutzen dieselbe RAV-Dateifamilie, aber ihre Firmware ist anders — ein Nutzer meldete `CommonID`
-statt `CommonI2`. Die Key-Tabelle kommt aus der Firmware des jeweiligen Stifts
-(`data/keytable.bin` stammt aus `Update3203L.upd`), also prüfe einen
-Gen-3-Stift erstmal mit seinen eigenen Original-Dateien. Der Decryptor macht das einfach:
+Auf echter Hardware verifiziert: **tiptoi-Stift Gen 2 (3203L)** mit `key8 = CommonI2`. Nur der
+Gen-2-Stift hat einen Player eingebaut, also kann nur er eine `.rav` abspielen. Gen-3-Stifte
+haben keinen Player, für sie ist dieses Tool nicht gedacht. Manche Gen-2-Stifte haben eine
+andere Firmware und melden `CommonID` statt `CommonI2`. Die Key-Tabelle kommt aus der Firmware
+des jeweiligen Stifts (`data/keytable.bin` stammt aus `Update3203L.upd`), also teste deinen
+Gen-2-Stift an seinen eigenen Original-Dateien. Der Decryptor macht das einfach:
 
 ```
 python rav_cli.py decrypt "Old MacDonald Had a Farm.rav"   # zeigt key8 an

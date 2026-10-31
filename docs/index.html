@@ -4,24 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>RAVage — put your own audio on a tiptoi pen, in the browser</title>
-<meta name="description" content="Convert mp3, wav, m4a or flac to .rav for a Ravensburger tiptoi pen, or decrypt stock .rav files back to ogg, in the browser. Nothing is uploaded.">
+<title>RAVage: put your own audio on a tiptoi pen, in the browser</title>
+<meta name="description" content="Convert mp3, wav, m4a or flac to .rav for a Ravensburger tiptoi pen, or decrypt stock .rav files back to ogg, in the browser. No server involved.">
 <link rel="canonical" href="https://markthegamer108.github.io/RAVage/">
 <link rel="sitemap" type="application/xml" href="sitemap.xml">
 <meta name="theme-color" content="#0a0a0b">
 <meta name="color-scheme" content="dark">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="RAVage — put your own audio on a tiptoi pen">
+<meta property="og:title" content="RAVage: put your own audio on a tiptoi pen">
 <meta property="og:description" content="Drop an audio file in the browser, get a .rav your tiptoi pen will play. Reverse-engineered from the pen's own firmware.">
 <meta property="og:url" content="https://markthegamer108.github.io/RAVage/">
 <meta property="og:image" content="https://markthegamer108.github.io/RAVage/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="RAVage — put your own audio on a tiptoi pen.">
+<meta property="og:image:alt" content="RAVage: put your own audio on a tiptoi pen.">
 <meta name="twitter:image" content="https://markthegamer108.github.io/RAVage/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="RAVage — put your own audio on a tiptoi pen">
+<meta name="twitter:title" content="RAVage: put your own audio on a tiptoi pen">
 <meta name="twitter:description" content="Drop an audio file in the browser, get a .rav your tiptoi pen will play.">
 <meta name="twitter:image" content="https://markthegamer108.github.io/RAVage/og.png">
 
@@ -160,7 +160,7 @@ code{
 .conv__drop:hover,.conv__drop[data-over="true"]{background:rgba(255,106,61,.055)}
 .conv__drop b{font-size:15px;font-weight:600}
 .conv__drop small{color:var(--muted-2);font-family:var(--mono);font-size:11px;letter-spacing:.04em}
-.conv__drop svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin-bottom:2px}
+.conv__drop svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin-bottom:2px}
 @media (max-width:760px){.conv__drop{border-right:0;border-bottom:1px solid var(--line-soft)}}
 
 .conv__log{
@@ -364,7 +364,7 @@ select{
   <div class="wrap nav__in">
     <a class="brand" href="#top"><span class="brand__mark">R</span> RAVage</a>
     <nav class="nav__links" aria-label="Sections">
-      <a href="#convert">Convert</a>
+      <a href="#convert">Encrypt</a>
       <a href="#binaries">Binaries</a>
       <a href="#format">Format</a>
       <a href="#crack">How it was cracked</a>
@@ -380,20 +380,20 @@ select{
 
     <p class="lede">
       RAVage turns an mp3, wav, m4a or flac into a <code>.rav</code> file the pen will
-      play, and takes stock <code>.rav</code> files apart again. The converter below
-      runs entirely in this tab. No upload, no server, no ffmpeg.
+      play, and turns stock <code>.rav</code> files back into <code>.ogg</code>. Both
+      directions run in this tab. Your file never reaches a server, and there's no ffmpeg.
     </p>
 
     <div class="hero__note">
       <span><i></i>MIT licensed</span>
       <span><i></i>Tested on a 3203L</span>
-      <span><i></i>No upload</span>
+      <span><i></i>Runs locally</span>
     </div>
 
     <div class="conv" id="conv">
       <div class="conv__bar">
         <div class="modes" role="group" aria-label="Mode">
-          <button type="button" class="mode" id="mode-convert" aria-pressed="true">Convert</button>
+          <button type="button" class="mode" id="mode-encrypt" aria-pressed="true">Encrypt</button>
           <button type="button" class="mode" id="mode-decrypt" aria-pressed="false">Decrypt</button>
         </div>
         <span id="conv-status">ready</span>
@@ -401,7 +401,7 @@ select{
 
       <div class="conv__body">
         <label class="conv__drop" id="drop" for="file">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2"/><path d="M7 9v6"/><path d="M11 6v12"/><path d="M15 8v8"/><path d="M19 10v4"/></svg>
           <b id="drop-title">Drop an audio file</b>
           <small id="drop-sub">or click · mp3 wav m4a flac ogg aac</small>
           <input type="file" id="file" accept="audio/*,.mp3,.wav,.m4a,.flac,.ogg,.aac,.aiff" hidden>
@@ -420,7 +420,7 @@ select{
             <option value="CommonID">CommonID</option>
           </select>
         </label>
-        <button class="btn btn--solid" id="go">Convert</button>
+        <button class="btn btn--solid" id="go">Encrypt</button>
         <a class="btn" id="save" hidden download>Download .rav</a>
         <span class="conv__spacer"></span>
         <p class="conv__hint" id="hint">the pen's key is in its firmware; try CommonI2 first</p>
@@ -430,7 +430,7 @@ select{
     <div class="note">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
       <div>
-        The browser converter is new and hasn't been on a physical pen yet. If the file is
+        The browser encoder is new and hasn't been on a physical pen yet. If the file is
         silent, run the desktop build's pen test first, or decrypt one of your own stock
         <code>.rav</code> files to see which key your pen wants.
       </div>
@@ -442,7 +442,7 @@ select{
     <div>
       <h2>Or take a build</h2>
       <p>
-        Same converter, no browser. PyInstaller one-file builds with ffmpeg and the key
+        Same tool, no browser. PyInstaller one-file builds with ffmpeg and the key
         table inside, so there's nothing to install and no Python on your <code>PATH</code>.
         macOS ones are unsigned.
       </p>
@@ -497,7 +497,7 @@ select{
   <section class="wrap sec reveal">
     <div class="rail"><b>02</b>The short version</div>
     <div>
-      <h2>A converter, and a decryptor</h2>
+      <h2>Encrypt, and decrypt</h2>
       <p>
         The pen stores each track as a 32-byte header followed by an Ogg Vorbis stream
         that's been run through a keyed byte transform. RAVage does the whole pipeline:
@@ -597,7 +597,7 @@ op <span class="n">3</span>  c ^ kb</pre>
         </li>
         <li>
           <b>Two quirks</b>
-          <p>The pen ignores Ogg page CRCs, which is a sloppy decoder and lucky for us. It also rejects fat comment headers, which is why the converter strips metadata.</p>
+          <p>The pen ignores Ogg page CRCs, which is a sloppy decoder and lucky for us. It also rejects fat comment headers, which is why the tool strips metadata.</p>
         </li>
         <li>
           <b>Old MacDonald, Olchi, Drei Chinesen</b>

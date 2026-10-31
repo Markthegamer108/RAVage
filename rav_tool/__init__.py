@@ -1,1 +1,1 @@
-"""RAV Tool — tiptoi .rav audio converter."""
+"""tiptoi .rav audio conversion."""

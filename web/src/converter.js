@@ -9,14 +9,14 @@ const $ = (id) => document.getElementById(id);
 const drop = $('drop'), fileInput = $('file'), logEl = $('log');
 const goBtn = $('go'), saveBtn = $('save'), statusEl = $('conv-status'), keySel = $('key');
 const hintEl = $('hint'), dropTitle = $('drop-title'), dropSub = $('drop-sub'), keyRow = $('keyrow');
-const modeBtns = { convert: $('mode-convert'), decrypt: $('mode-decrypt') };
+const modeBtns = { encrypt: $('mode-encrypt'), decrypt: $('mode-decrypt') };
 
 const MODES = {
-  convert: {
+  encrypt: {
     title: 'Drop an audio file',
     sub: 'or click · mp3 wav m4a flac ogg aac',
     accept: 'audio/*,.mp3,.wav,.m4a,.flac,.ogg,.aac,.aiff',
-    button: 'Convert',
+    button: 'Encrypt',
     empty: ['waiting for a file', 'it never leaves this tab'],
     hint: "the pen's key is in its firmware; try CommonI2 first",
     done: "copy it into the pen's songs folder, then unplug",
@@ -32,7 +32,7 @@ const MODES = {
   },
 };
 
-let mode = 'convert';
+let mode = 'encrypt';
 let pending = null;
 
 function log(line, cls) {
@@ -92,7 +92,7 @@ function setMode(next) {
   dropSub.textContent = m.sub;
   fileInput.setAttribute('accept', m.accept);
   goBtn.textContent = m.button;
-  keyRow.hidden = next !== 'convert';
+  keyRow.hidden = next !== 'encrypt';
   hintEl.textContent = m.hint;
   resetLog();
 }
@@ -107,8 +107,8 @@ function chooseFile(file) {
   log('> ' + file.name, 'l-prompt');
   log('  ' + (file.size / 1048576).toFixed(1) + ' MB', 'l-dim');
   setStatus('file ready');
-  hintEl.textContent = mode === 'convert'
-    ? 'converts locally, nothing leaves this tab'
+  hintEl.textContent = mode === 'encrypt'
+    ? 'encrypts locally, nothing leaves this tab'
     : 'decrypts locally, nothing leaves this tab';
 }
 
@@ -124,7 +124,7 @@ fileInput.addEventListener('change', () => {
   fileInput.value = '';
 });
 
-async function runConvert(file, key8) {
+async function runEncrypt(file, key8) {
   const ac = new AudioContext();
   let decoded;
   try {
@@ -226,7 +226,7 @@ goBtn.addEventListener('click', async () => {
   setStatus('working');
 
   try {
-    const out = job === 'convert' ? await runConvert(file, keySel.value) : await runDecrypt(file);
+    const out = job === 'encrypt' ? await runEncrypt(file, keySel.value) : await runDecrypt(file);
     saveBtn.href = URL.createObjectURL(out.blob);
     saveBtn.download = out.name;
     saveBtn.hidden = false;
@@ -243,10 +243,10 @@ goBtn.addEventListener('click', async () => {
 });
 
 keySel.addEventListener('change', () => {
-  if (mode !== 'convert') return;
+  if (mode !== 'encrypt') return;
   hintEl.textContent = keySel.value === 'CommonI2'
     ? 'the default on every pen tested so far'
     : 'newer pens; decrypt a stock .rav to confirm';
 });
 
-setMode('convert');
+setMode('encrypt');

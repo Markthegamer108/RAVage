@@ -47,7 +47,7 @@ on GitHub Actions (`.github/workflows/build.yml`).
 ### Tested hardware
 
 Verified on a real pen: **tiptoi gen 2 (3203L)** with `key8 = CommonI2`. Only the
-gen 2 pen has a player inside, so only it can play a `.rav` — gen 3 pens have no
+gen 2 pen has a player inside, so only it can play a `.rav`. Gen 3 pens have no
 player at all and this tool does not apply to them. Some gen 2 pens ship with
 different firmware and report `CommonID` instead of `CommonI2`. The key table comes
 from each pen's own firmware (`data/keytable.bin` is from `Update3203L.upd`), so if
