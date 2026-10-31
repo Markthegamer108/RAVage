@@ -1,12 +1,3 @@
-"""audio conversion helpers.
-
-ffmpeg does the heavy lifting: anything it can decode gets turned into
-Ogg Vorbis at the pen's native settings (mono 22050 Hz).
-
-ffmpeg is found via the RAV_FFMPEG env var, then PATH, then the static
-binary that ships with imageio-ffmpeg (if installed).
-"""
-
 import os
 import re
 import shutil
@@ -15,11 +6,6 @@ import subprocess
 PEN_CHANNELS = 1
 PEN_RATE = 22050
 
-# youtube rips embed a big metadata block in the file tags (title, artist,
-# a giant "synopsis" with links...). the resulting vorbis comment header
-# gets too big for the pen's parser - a ~9 KB header makes it skip the
-# file, ~3.6 KB works. so we strip all metadata, and these markers just
-# let the gui warn the user that a file is a youtube download.
 YOUTUBE_MARKERS = ("youtube", "youtu.be", "ytimg", "stream now", "apple.co",
                    "spoti.fi", "instagram.com", "twitter.com", "discord.gg",
                    "music video", "behind the scenes", "lyrics", "official",
@@ -43,7 +29,6 @@ def find_ffmpeg():
 
 
 def probe_duration(ffmpeg, src):
-    """read the input length from `ffmpeg -i` stderr, no ffprobe needed."""
     try:
         p = subprocess.run([ffmpeg, "-hide_banner", "-i", src],
                            capture_output=True, timeout=30)
@@ -57,11 +42,6 @@ def probe_duration(ffmpeg, src):
 
 
 def detect_youtube_metadata(ffmpeg, src):
-    """heuristic: does this file carry youtube-ish metadata?
-
-    only inspects the file's own tags (not the filename), returns the
-    markers we found. purely cosmetic - metadata gets stripped anyway.
-    """
     try:
         p = subprocess.run([ffmpeg, "-hide_banner", "-i", src],
                            capture_output=True, timeout=30)
@@ -77,15 +57,6 @@ def detect_youtube_metadata(ffmpeg, src):
 def to_ogg(src, dst, channels=PEN_CHANNELS, rate=PEN_RATE,
            vorbis_quality=5, gain_db=-4.0, highpass_hz=70, limiter=True,
            on_progress=None):
-    """transcode src to an Ogg Vorbis file at dst.
-
-    the default chain tames the audio for the pen's tiny speaker: a
-    high-pass at 70 Hz (sub-bass just muddies it), -4 dB, and a limiter
-    so nothing clips. pass gain_db=0, highpass_hz=0, limiter=False for
-    the untouched stream.
-
-    on_progress(seconds_encoded, total_seconds) is called periodically.
-    """
     ffmpeg = find_ffmpeg()
     if ffmpeg is None:
         raise RuntimeError(

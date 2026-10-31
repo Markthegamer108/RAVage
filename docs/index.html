@@ -306,7 +306,6 @@ select{
   margin:0;padding:15px 16px;overflow-x:auto;
   font-family:var(--mono);font-size:12.4px;line-height:1.85;color:#c9c7c1;tab-size:2;
 }
-.code .c{color:#8a8882}
 .code .k{color:#ff9d7d}
 .code .s{color:#a8d5a2}
 .code .n{color:#ffd479}
@@ -548,12 +547,10 @@ select{
 
       <div class="code">
         <div class="code__head"><span>key derivation</span><span>rav_tool/ravcrypto.py</span></div>
-<pre><span class="c"># the 4096-byte table sits in the firmware at 0xDBADC</span>
-<span class="k">key8</span>     = <span class="s">"CommonI2"</span>   <span class="c"># or "CommonID" on some pens</span>
+<pre><span class="k">key8</span>     = <span class="s">"CommonI2"</span>
 <span class="k">checksum</span> = (<span class="n">sum</span>(key8) + value16) &amp; <span class="n">0xFFFF</span>
-<span class="k">keystream</span>[i] = TABLE[(checksum + i) &amp; <span class="n">0xFFF</span>]   <span class="c"># 512 bytes</span>
+<span class="k">keystream</span>[i] = TABLE[(checksum + i) &amp; <span class="n">0xFFF</span>]
 
-<span class="c"># body cipher, applied from 0x20 onward</span>
 kb = keystream[(pos - <span class="n">0x20</span>) &amp; <span class="n">0x1FF</span>]
 op = pos &amp; <span class="n">3</span>
 
@@ -562,6 +559,13 @@ op <span class="n">1</span>  (c - kb) &amp; <span class="n">0xFF</span>
 op <span class="n">2</span>  (c + kb) &amp; <span class="n">0xFF</span>
 op <span class="n">3</span>  c ^ kb</pre>
       </div>
+
+      <p>
+        The 4096-byte table sits at <code>0xDBADC</code> in the pen's firmware, and the
+        keystream is 512 bytes. <code>key8</code> is <code>CommonI2</code> on every pen tested
+        here, <code>CommonID</code> on some newer ones. The body cipher starts at offset
+        <code>0x20</code>, where the Ogg Vorbis stream begins.
+      </p>
     </div>
   </section>
 

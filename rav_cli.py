@@ -1,11 +1,3 @@
-"""command line converter.
-
-just the cli version of rav_gui.py, for people who prefer terminals.
-examples:
-    python rav_cli.py convert "My Song.mp3" -o "My Song.rav"
-    python rav_cli.py decrypt "Old MacDonald Had a Farm.rav" -o song.ogg
-"""
-
 import argparse
 import os
 import sys
@@ -13,7 +5,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from rav_tool import convert, ravcrypto  # noqa: E402
+from rav_tool import convert, ravcrypto
 
 
 def cmd_convert(args):
@@ -49,8 +41,6 @@ def cmd_convert(args):
 
 
 def cmd_decrypt(args):
-    # mostly here for research/curiosity - decrypt a stock .rav and poke at
-    # the ogg inside
     table = ravcrypto.load_keytable(args.table)
     with open(args.input, "rb") as fh:
         data = fh.read()
@@ -64,7 +54,6 @@ def cmd_decrypt(args):
 
 
 def _parse_key8(s):
-    # key8 has to be exactly 8 ascii chars (CommonI2 or CommonID)
     try:
         b = s.encode("ascii")
     except UnicodeEncodeError:
@@ -106,7 +95,6 @@ def main():
 
     args = parser.parse_args()
     (cmd_convert if args.cmd == "convert" else cmd_decrypt)(args)
-
 
 if __name__ == "__main__":
     main()

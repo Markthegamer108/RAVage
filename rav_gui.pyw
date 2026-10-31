@@ -1,8 +1,3 @@
-"""RAV maker - turns any audio file into a .rav for the tiptoi pen.
-
-Run:  python rav_gui.py     (or double-click run_gui.bat)
-"""
-
 import os
 import queue
 import sys
@@ -12,7 +7,7 @@ from tkinter import filedialog, messagebox, ttk
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from rav_tool import convert, ravcrypto  # noqa: E402
+from rav_tool import convert, ravcrypto
 
 FORMATS = [
     ("mono 22050 Hz", 1, 22050),
@@ -25,7 +20,6 @@ QUALITIES = [("low", 4), ("medium", 5), ("high", 8)]
 SOUNDS = [("softer, bass-tamed", -4.0, 70, True),
           ("much softer", -8.0, 70, True),
           ("original loudness", 0.0, 0, False)]
-
 
 class RavGui:
     def __init__(self, root):
@@ -275,12 +269,10 @@ class RavGui:
                 return
         self.root.destroy()
 
-
 def main():
     root = tk.Tk()
     RavGui(root)
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()

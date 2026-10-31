@@ -1,9 +1,3 @@
-"""make .rav files for the tiptoi pen.
-
-just a tiny tkinter wrapper around rav_tool. nothing fancy.
-run:  python rav_gui.py     (or double-click run_gui.bat)
-"""
-
 import math
 import os
 import queue
@@ -16,9 +10,8 @@ from tkinter import filedialog, messagebox, ttk
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from rav_tool import convert, ravcrypto  # noqa: E402
+from rav_tool import convert, ravcrypto
 
-# you probably won't touch these
 FORMATS = [
     ("mono 22050 Hz", 1, 22050),
     ("mono 44100 Hz", 1, 44100),
@@ -33,7 +26,6 @@ SOUNDS = [("softer, bass-tamed", -4.0, 70, True),
 
 
 def find_tiptoi_drive():
-    """look for a drive named 'tiptoi' - windows is annoying about this"""
     name = sys.platform
     if name == "win32":
         return _find_tiptoi_win32()
@@ -49,7 +41,6 @@ def find_tiptoi_drive():
 
 
 def _find_tiptoi_win32():
-    # windows: gotta use ctypes to get volume labels, annoying but works
     import ctypes
     import string
     bitmask = ctypes.windll.kernel32.GetLogicalDrives()
@@ -68,7 +59,6 @@ def _find_tiptoi_win32():
 
 
 def _find_tiptoi_posix(base):
-    # mac/linux: just check /Volumes or /media, much simpler
     if not os.path.isdir(base):
         return
     try:
@@ -82,14 +72,12 @@ def _find_tiptoi_posix(base):
 
 
 def _songs_folder(pen_path):
-    """return the songs subfolder on the pen, creating it if needed."""
     songs = os.path.join(pen_path, "songs")
     os.makedirs(songs, exist_ok=True)
     return songs
 
 
 def _make_beep_wav(path):
-    """just writes 5 beeps to a wav file, nothing fancy"""
     sr = 22050
     freq = 440
     beep = int(sr * 0.2)
@@ -113,8 +101,8 @@ class RavGui:
         self.running = False
         self.events = queue.Queue()
         self.pen_path = None
-        self.confirmed_key8 = None  # set after a successful test
-        self._testing_key = ""  # which key we're currently testing
+        self.confirmed_key8 = None
+        self._testing_key = ""
 
         root.title("RAVage - make .rav files")
         root.resizable(False, False)
@@ -135,8 +123,6 @@ class RavGui:
         root.after(80, self._drain_events)
         root.after(300, self._center)
         root.after(400, self._start_pen_scan)
-
-    # ------------------------------------------------------------------ frames
 
     def _build_test_screen(self):
         self.frame_test = tk.Frame(self.root, padx=14, pady=14)
@@ -265,8 +251,6 @@ class RavGui:
                                     command=self._back_to_test)
         self.btn_retest.pack(anchor="w", pady=(10, 0))
 
-    # -------------------------------------------------------- screen switching
-
     def _show_convert_screen(self):
         self.frame_test.pack_forget()
         self.frame_convert.pack(fill="both", expand=True)
@@ -289,8 +273,6 @@ class RavGui:
         self.progress_test.start(12)
         self._start_pen_scan()
 
-    # --------------------------------------------------------- pen detection
-
     def _start_pen_scan(self):
         self.btn_retry.pack_forget()
         self.btn_yes.pack_forget()
@@ -304,8 +286,6 @@ class RavGui:
     def _scan_worker(self):
         pen = find_tiptoi_drive()
         self.events.put(("pen_found", pen))
-
-    # ------------------------------------------------------- variant testing
 
     def _begin_variant_test(self):
         self.lbl_test_status.config(
@@ -360,7 +340,6 @@ class RavGui:
     def _on_no(self):
         self._cleanup_test_rav()
         if self._testing_key == "CommonID":
-            # didn't work, try the other one
             self._testing_key = "CommonI2"
             self.lbl_test_status.config(
                 text="unplug the pen, then plug it back in\nso we can try CommonI2...")
@@ -370,7 +349,6 @@ class RavGui:
             self.progress_test.start(12)
             threading.Thread(target=self._rescan_for_pen, daemon=True).start()
         else:
-            # neither worked, just let them pick manually
             self.progress_test.stop()
             self.btn_yes.pack_forget()
             self.btn_no.pack_forget()
@@ -384,11 +362,8 @@ class RavGui:
             self.btn_ok.pack(anchor="w", pady=(6, 0))
 
     def _rescan_for_pen(self):
-        # they unplugged it, need to find it again
         pen = find_tiptoi_drive()
         self.events.put(("pen_found_for_test2", pen))
-
-    # ------------------------------------------------------- conversion GUI
 
     def _pick_input(self):
         path = filedialog.askopenfilename(
@@ -423,7 +398,7 @@ class RavGui:
     def _open_outdir(self):
         d = self.var_outdir.get()
         if d and os.path.isdir(d):
-            os.startfile(d)  # windows only, but whatever it works
+            os.startfile(d)
 
     def _result_path(self):
         stem = os.path.splitext(os.path.basename(self.var_input.get()))[0] + ".rav"
@@ -507,9 +482,6 @@ class RavGui:
             self.events.put(("done", dst, len(rav)))
         except Exception as exc:
             self.events.put(("error", str(exc)))
-
-    # ---------------------------------------------------------- event drain
-    # this runs every 80ms, keeps the ui responsive
 
     def _drain_events(self):
         try:
@@ -602,10 +574,7 @@ class RavGui:
             pass
         self.root.after(80, self._drain_events)
 
-    # ------------------------------------------------------------------ misc
-
     def _center(self):
-        # center the window on screen, roughly
         self.root.update_idletasks()
         w, h = self.root.winfo_width(), self.root.winfo_height()
         x = (self.root.winfo_screenwidth() - w) // 2
@@ -624,7 +593,6 @@ def main():
     root = tk.Tk()
     RavGui(root)
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
