@@ -1,6 +1,3 @@
-// RAV container format for the Ravensburger tiptoi pen.
-// Direct port of rav_tool/ravcrypto.py -- keep them in sync.
-
 export const MAGIC = new Uint8Array([...'Ravensburgerv03\0'].map(c => c.charCodeAt(0)));
 export const HEADER_LEN = 0x20;
 export const KEYSTREAM_LEN = 512;
@@ -43,8 +40,6 @@ export function derive(value16, keyBlob, table) {
   return { key8: k8, checksum, keystream };
 }
 
-// start = file offset of data[0] (0x20 for the body).
-// keystream index is payload-relative, the op selector is absolute.
 export function transform(data, keystream, start, decrypt) {
   const out = new Uint8Array(data.length);
   for (let i = 0; i < data.length; i++) {

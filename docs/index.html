@@ -5,15 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>RAVage — put your own audio on a tiptoi pen, in the browser</title>
-<meta name="description" content="Convert mp3, wav, m4a or flac into a .rav file a Ravensburger tiptoi pen will play, right in the browser. Nothing is uploaded. Also decrypts stock .rav files, with standalone builds for Windows, macOS and Linux.">
+<meta name="description" content="Convert mp3, wav, m4a or flac to .rav for a Ravensburger tiptoi pen, or decrypt stock .rav files back to ogg, in the browser. Nothing is uploaded.">
 <link rel="canonical" href="https://markthegamer108.github.io/RAVage/">
 <link rel="sitemap" type="application/xml" href="sitemap.xml">
 <meta name="theme-color" content="#0a0a0b">
 <meta name="color-scheme" content="dark">
-
-<!-- Search Console verification: paste the meta tag from
-     Search Console -> Verify ownership -> HTML tag here, then delete this comment. -->
-<!-- <meta name="google-site-verification" content="" /> -->
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="RAVage — put your own audio on a tiptoi pen">
@@ -32,7 +28,6 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230a0a0b'/%3E%3Cpath d='M7 24V8h7.4c3.4 0 5.6 1.9 5.6 5 0 2.3-1.2 4-3.2 4.6l4.2 6.4h-3.6l-3.7-5.9H10V24H7zm3-8.4h4.1c1.7 0 2.7-.9 2.7-2.5S15.8 11 14.1 11H10v4.6z' fill='%23ff6a3d'/%3E%3C/svg%3E">
 
 <style>
-/* ─── tokens ─────────────────────────────────────────────── */
 :root{
   --bg:#0a0a0b;
   --surface:#111113;
@@ -72,7 +67,6 @@ a{color:inherit}
 
 .wrap{width:100%;max-width:var(--max);margin-inline:auto;padding-inline:28px;position:relative;z-index:1}
 
-/* ─── type ───────────────────────────────────────────────── */
 h1,h2,h3{margin:0;font-weight:400}
 h1,h2{font-family:var(--serif);letter-spacing:-.02em;line-height:1.06;text-wrap:balance}
 h1{font-size:clamp(2.5rem,5.6vw,4.1rem)}
@@ -94,7 +88,6 @@ code{
   overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
 }
 
-/* ─── nav ────────────────────────────────────────────────── */
 .nav{
   position:sticky;top:0;z-index:40;
   background:rgba(10,10,11,.82);
@@ -117,7 +110,6 @@ code{
 .nav__links a:hover{color:var(--text);background:rgba(255,255,255,.05)}
 @media (max-width:860px){.nav__links a:not(.nav__repo){display:none}}
 
-/* ─── hero ───────────────────────────────────────────────── */
 .hero{padding-block:clamp(48px,7vw,86px) clamp(40px,5vw,60px)}
 .hero h1{margin-bottom:24px}
 .hero h1 em{font-style:italic;color:var(--accent)}
@@ -128,7 +120,6 @@ code{
 .hero__note span{display:inline-flex;align-items:center;gap:7px}
 .hero__note i{width:3px;height:3px;border-radius:50%;background:var(--accent);display:block}
 
-/* ─── converter ──────────────────────────────────────────── */
 .conv{
   margin-top:clamp(30px,4vw,44px);
   border:1px solid var(--line);
@@ -141,11 +132,21 @@ code{
   padding:10px 16px;border-bottom:1px solid var(--line-soft);
   font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);
 }
-.conv__bar b{font-weight:500;color:var(--text)}
 .conv__bar span{display:inline-flex;align-items:center;gap:7px}
 .conv__bar span::before{
   content:"";width:5px;height:5px;border-radius:50%;background:#7ee787;box-shadow:0 0 6px #7ee787;
 }
+.modes{display:inline-flex;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.mode{
+  font:inherit;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  padding:4px 11px;background:transparent;color:var(--muted-2);border:0;cursor:pointer;
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.mode+.mode{border-left:1px solid var(--line)}
+.mode[aria-pressed="true"]{background:var(--accent);color:#160803;font-weight:600}
+.mode:hover:not([aria-pressed="true"]){color:var(--text);background:rgba(255,255,255,.045)}
+.mode:disabled{opacity:.5;cursor:not-allowed}
+.mode:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
 .conv__body{display:grid;grid-template-columns:1.15fr .85fr;min-height:196px}
 @media (max-width:760px){.conv__body{grid-template-columns:1fr}}
@@ -188,7 +189,6 @@ select{
 .conv__spacer{flex:1}
 .conv__hint{font-size:12.2px;color:var(--muted-2);margin:0}
 
-/* ─── buttons ────────────────────────────────────────────── */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:9px 16px;border-radius:4px;border:1px solid var(--line);
@@ -203,7 +203,6 @@ select{
 .btn--solid:disabled{background:var(--accent);border-color:var(--accent)}
 .btn svg{width:15px;height:15px;flex:none}
 
-/* ─── section grid with rail ─────────────────────────────── */
 .sec{
   display:grid;grid-template-columns:150px minmax(0,1fr);
   gap:clamp(20px,4vw,56px);
@@ -224,7 +223,6 @@ select{
 .sec h2+p{max-width:60ch}
 .sec p{color:var(--muted);text-wrap:pretty}
 
-/* ─── downloads ──────────────────────────────────────────── */
 .bins{list-style:none;margin:26px 0 0;padding:0;border-top:1px solid var(--line)}
 .bins li{border-bottom:1px solid var(--line-soft)}
 .bins a{
@@ -251,7 +249,6 @@ select{
 .bins__foot a{color:var(--muted);text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(255,255,255,.2)}
 .bins__foot a:hover{color:var(--accent)}
 
-/* ─── spec list ──────────────────────────────────────────── */
 .spec-list{margin:26px 0 0;display:grid;gap:0;border-top:1px solid var(--line)}
 .spec-list div{
   display:grid;grid-template-columns:132px minmax(0,1fr);gap:20px;
@@ -264,7 +261,6 @@ select{
 }
 .spec-list dd{margin:0;font-size:14.4px;color:#cfcdc7}
 
-/* ─── aside / screenshot ─────────────────────────────────── */
 .figure{
   margin:30px 0 0;max-width:521px;
   border:1px solid var(--line);border-radius:5px;overflow:hidden;background:var(--surface);
@@ -282,7 +278,6 @@ select{
   font-size:12.6px;line-height:1.55;color:var(--muted-2);
 }
 
-/* ─── header table ───────────────────────────────────────── */
 .tbl{width:100%;border-collapse:collapse;margin-top:24px;font-size:13.4px}
 .tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
 .tbl thead th{
@@ -299,7 +294,6 @@ select{
   .tbl th,.tbl td{padding:8px 9px}
 }
 
-/* ─── code block ─────────────────────────────────────────── */
 .code{
   margin-top:26px;border:1px solid var(--line);border-radius:5px;background:var(--surface);overflow:hidden;
 }
@@ -317,7 +311,6 @@ select{
 .code .s{color:#a8d5a2}
 .code .n{color:#ffd479}
 
-/* ─── timeline ───────────────────────────────────────────── */
 .tl{list-style:none;margin:26px 0 0;padding:0}
 .tl li{position:relative;padding:0 0 26px 26px;border-left:1px solid var(--line-soft)}
 .tl li:last-child{border-left-color:transparent;padding-bottom:0}
@@ -330,7 +323,6 @@ select{
 .tl b em{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--muted-2);margin-left:8px;letter-spacing:.06em}
 .tl p{margin:0;font-size:14.2px;max-width:64ch}
 
-/* ─── note ───────────────────────────────────────────────── */
 .note{
   display:flex;gap:11px;margin-top:26px;padding:13px 16px;max-width:62ch;
   border:1px solid rgba(255,194,71,.22);border-radius:4px;background:rgba(255,194,71,.05);
@@ -340,7 +332,6 @@ select{
 .note b{color:#ffe4a8;font-weight:600}
 .note code{color:#ffe0a8;background:rgba(255,194,71,.1);border-color:rgba(255,194,71,.2)}
 
-/* ─── footer ─────────────────────────────────────────────── */
 .footer{border-top:1px solid var(--line);padding-block:40px 56px;margin-top:clamp(40px,6vw,72px)}
 .footer__in{display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between;align-items:flex-start}
 .footer__brand{max-width:32ch}
@@ -357,7 +348,6 @@ select{
   color:var(--muted-2);font-size:12px;line-height:1.7;
 }
 
-/* ─── motion ─────────────────────────────────────────────── */
 .js .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .js .reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
@@ -385,7 +375,6 @@ select{
 
 <main id="top">
 
-  <!-- ═══ hero + converter ═══ -->
   <section class="wrap hero" id="convert">
     <h1>Your own audio,<br>on a tiptoi pen.</h1>
 
@@ -403,15 +392,18 @@ select{
 
     <div class="conv" id="conv">
       <div class="conv__bar">
-        <b>convert</b>
+        <div class="modes" role="group" aria-label="Mode">
+          <button type="button" class="mode" id="mode-convert" aria-pressed="true">Convert</button>
+          <button type="button" class="mode" id="mode-decrypt" aria-pressed="false">Decrypt</button>
+        </div>
         <span id="conv-status">ready</span>
       </div>
 
       <div class="conv__body">
         <label class="conv__drop" id="drop" for="file">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
-          <b>Drop an audio file</b>
-          <small>or click · mp3 wav m4a flac ogg aac</small>
+          <b id="drop-title">Drop an audio file</b>
+          <small id="drop-sub">or click · mp3 wav m4a flac ogg aac</small>
           <input type="file" id="file" accept="audio/*,.mp3,.wav,.m4a,.flac,.ogg,.aac,.aiff" hidden>
         </label>
 
@@ -422,7 +414,7 @@ select{
       </div>
 
       <div class="conv__foot">
-        <label for="key">pen key
+        <label for="key" id="keyrow">pen key
           <select id="key">
             <option value="CommonI2">CommonI2</option>
             <option value="CommonID">CommonID</option>
@@ -445,7 +437,6 @@ select{
     </div>
   </section>
 
-  <!-- ═══ binaries ═══ -->
   <section class="wrap sec reveal" id="binaries">
     <div class="rail"><b>01</b>Binaries</div>
     <div>
@@ -503,7 +494,6 @@ select{
     </div>
   </section>
 
-  <!-- ═══ what it does ═══ -->
   <section class="wrap sec reveal">
     <div class="rail"><b>02</b>The short version</div>
     <div>
@@ -533,7 +523,6 @@ select{
     </div>
   </section>
 
-  <!-- ═══ format ═══ -->
   <section class="wrap sec reveal" id="format">
     <div class="rail"><b>03</b>The format</div>
     <div>
@@ -576,7 +565,6 @@ op <span class="n">3</span>  c ^ kb</pre>
     </div>
   </section>
 
-  <!-- ═══ the crack ═══ -->
   <section class="wrap sec reveal" id="crack">
     <div class="rail"><b>04</b>How it was cracked</div>
     <div>
@@ -705,15 +693,38 @@ document.documentElement.classList.add('js');
 
 <script type="module">
 const TARGET_RATE = 22050;
-const VORBIS_QUALITY = 5;   // oggenc scale, 0-10: same as the CLI's -q:a 5
+const VORBIS_QUALITY = 5;
 const MAX_MINUTES = 20;
 
 const $ = (id) => document.getElementById(id);
 const drop = $('drop'), fileInput = $('file'), logEl = $('log');
 const goBtn = $('go'), saveBtn = $('save'), statusEl = $('conv-status'), keySel = $('key');
+const hintEl = $('hint'), dropTitle = $('drop-title'), dropSub = $('drop-sub'), keyRow = $('keyrow');
+const modeBtns = { convert: $('mode-convert'), decrypt: $('mode-decrypt') };
 
-let pending = null;     // File
-let resultBlob = null;
+const MODES = {
+  convert: {
+    title: 'Drop an audio file',
+    sub: 'or click · mp3 wav m4a flac ogg aac',
+    accept: 'audio/*,.mp3,.wav,.m4a,.flac,.ogg,.aac,.aiff',
+    button: 'Convert',
+    empty: ['waiting for a file', 'it never leaves this tab'],
+    hint: "the pen's key is in its firmware; try CommonI2 first",
+    done: "copy it into the pen's songs folder, then unplug",
+  },
+  decrypt: {
+    title: 'Drop a .rav file',
+    sub: "or click · a file from the pen's songs folder",
+    accept: '.rav,application/octet-stream',
+    button: 'Decrypt',
+    empty: ['waiting for a .rav', 'the key comes out of its own header'],
+    hint: 'the key is recovered from the file, nothing to pick',
+    done: 'plays in anything that reads ogg vorbis',
+  },
+};
+
+let mode = 'convert';
+let pending = null;
 
 function log(line, cls) {
   const p = document.createElement('p');
@@ -723,15 +734,29 @@ function log(line, cls) {
   logEl.scrollTop = logEl.scrollHeight;
   while (logEl.children.length > 14) logEl.removeChild(logEl.firstChild);
 }
+
 function clearLog() { logEl.textContent = ''; }
+
+function resetLog() {
+  clearLog();
+  for (const line of MODES[mode].empty) log(line, 'l-dim');
+}
+
 function setStatus(text) { statusEl.textContent = text; }
+
 function bytes(n) { return n.toLocaleString('en-US') + ' bytes'; }
+
 function clock(sec) {
   const m = Math.floor(sec / 60), s = Math.round(sec % 60);
   return m + ':' + String(s).padStart(2, '0');
 }
 
+function baseName(name) {
+  return name.replace(/\.[^.]+$/, '') || 'output';
+}
+
 let tablePromise = null;
+
 function loadTable() {
   if (!tablePromise) {
     tablePromise = fetch('keytable.bin').then(r => {
@@ -742,24 +767,40 @@ function loadTable() {
   return tablePromise;
 }
 
+function setMode(next) {
+  mode = next;
+  pending = null;
+  saveBtn.hidden = true;
+  goBtn.disabled = false;
+  setStatus('ready');
+
+  for (const [name, btn] of Object.entries(modeBtns)) {
+    btn.setAttribute('aria-pressed', String(name === next));
+  }
+
+  const m = MODES[next];
+  dropTitle.textContent = m.title;
+  dropSub.textContent = m.sub;
+  fileInput.setAttribute('accept', m.accept);
+  goBtn.textContent = m.button;
+  keyRow.hidden = next !== 'convert';
+  hintEl.textContent = m.hint;
+  resetLog();
+}
+
 function chooseFile(file) {
   if (!file) return;
   pending = file;
-  resultBlob = null;
   saveBtn.hidden = true;
   goBtn.disabled = false;
-  goBtn.textContent = 'Convert';
+  goBtn.textContent = MODES[mode].button;
   clearLog();
   log('> ' + file.name, 'l-prompt');
   log('  ' + (file.size / 1048576).toFixed(1) + ' MB', 'l-dim');
   setStatus('file ready');
-  $('hint').textContent = 'converts locally — nothing leaves this tab';
-}
-
-function resetLog() {
-  clearLog();
-  log('waiting for a file', 'l-dim');
-  log('it never leaves this tab', 'l-dim');
+  hintEl.textContent = mode === 'convert'
+    ? 'converts locally, nothing leaves this tab'
+    : 'decrypts locally, nothing leaves this tab';
 }
 
 drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.dataset.over = 'true'; });
@@ -771,30 +812,27 @@ drop.addEventListener('drop', (e) => {
 });
 fileInput.addEventListener('change', () => {
   chooseFile(fileInput.files && fileInput.files[0]);
-  fileInput.value = '';   // so picking the same file twice still fires
+  fileInput.value = '';
 });
 
-async function convert(file, key8) {
-  goBtn.disabled = true;
-  saveBtn.hidden = true;
-  setStatus('working');
-
+async function runConvert(file, key8) {
   const ac = new AudioContext();
   let decoded;
   try {
     decoded = await ac.decodeAudioData(await file.arrayBuffer());
   } catch (err) {
-    throw new Error('this browser cannot decode that file');
+    throw new Error(/\.rav$/i.test(file.name)
+      ? 'that is a .rav file, switch to Decrypt'
+      : 'this browser cannot decode that file');
   } finally {
     ac.close();
   }
 
   log('  decoded ' + clock(decoded.duration) + ', ' + decoded.sampleRate + ' Hz, ' + decoded.numberOfChannels + ' ch', 'l-dim');
   if (decoded.duration > MAX_MINUTES * 60) {
-    throw new Error('over ' + MAX_MINUTES + ' minutes — a browser runs out of memory there, use the desktop build');
+    throw new Error('over ' + MAX_MINUTES + ' minutes; a browser runs out of memory there, use the desktop build');
   }
 
-  // the pen's speaker can't do sub-bass; highpass 70, -4 dB, limiter at 0.891
   const frames = Math.ceil(decoded.duration * TARGET_RATE);
   const off = new OfflineAudioContext(1, frames, TARGET_RATE);
   const src = off.createBufferSource();
@@ -827,7 +865,6 @@ async function convert(file, key8) {
   const enc = await createEncoder('audio/ogg', wasm);
   enc.configure({ channels: 1, sampleRate: TARGET_RATE, vbrQuality: VORBIS_QUALITY });
 
-  // encode()/finalize() return views into wasm memory; copy before reuse
   const parts = [];
   parts.push(enc.encode([pcm]).slice());
   parts.push(enc.finalize().slice());
@@ -843,37 +880,70 @@ async function convert(file, key8) {
   const table = await loadTable();
   const rav = encryptRav(ogg, table, 0x78, key8);
   log('  encrypted with key8 = ' + key8, 'l-dim');
-  log('  wrote ' + (file.name.replace(/\.[^.]+$/, '') || 'output') + '.rav, ' + bytes(rav.length), 'l-ok');
 
-  return new Blob([rav], { type: 'application/octet-stream' });
+  const name = baseName(file.name) + '.rav';
+  log('  wrote ' + name + ', ' + bytes(rav.length), 'l-ok');
+  return { blob: new Blob([rav], { type: 'application/octet-stream' }), name };
+}
+
+async function runDecrypt(file) {
+  const input = new Uint8Array(await file.arrayBuffer());
+  const { decryptRav } = await import('./ravcrypto.js');
+  const table = await loadTable();
+  const info = decryptRav(input, table);
+  const key = new TextDecoder().decode(info.key8);
+
+  log('  header ok, value16 0x' + info.value16.toString(16).padStart(4, '0'), 'l-dim');
+  log('  key8 ' + key + ', checksum 0x' + info.checksum.toString(16).padStart(4, '0'), 'l-dim');
+
+  const sig = String.fromCharCode(...info.plaintext.subarray(0, 4));
+  if (sig !== 'OggS') throw new Error('no ogg vorbis inside, the key table may be wrong');
+
+  log('  decrypted ' + bytes(info.plaintext.length) + ' of ogg vorbis', 'l-dim');
+  const name = baseName(file.name) + '.ogg';
+  log('  wrote ' + name, 'l-ok');
+  return { blob: new Blob([info.plaintext], { type: 'audio/ogg' }), name };
+}
+
+for (const [name, btn] of Object.entries(modeBtns)) {
+  btn.addEventListener('click', () => setMode(name));
 }
 
 goBtn.addEventListener('click', async () => {
   if (!pending) { fileInput.click(); return; }
   const file = pending;
-  const key8 = keySel.value;
+  const job = mode;
+
+  goBtn.disabled = true;
+  for (const btn of Object.values(modeBtns)) btn.disabled = true;
+  saveBtn.hidden = true;
+  setStatus('working');
+
   try {
-    resultBlob = await convert(file, key8);
-    const name = (file.name.replace(/\.[^.]+$/, '') || 'output') + '.rav';
-    saveBtn.href = URL.createObjectURL(resultBlob);
-    saveBtn.download = name;
+    const out = job === 'convert' ? await runConvert(file, keySel.value) : await runDecrypt(file);
+    saveBtn.href = URL.createObjectURL(out.blob);
+    saveBtn.download = out.name;
     saveBtn.hidden = false;
-    saveBtn.textContent = 'Download ' + name;
-    goBtn.disabled = false;
+    saveBtn.textContent = 'Download ' + out.name;
     setStatus('done');
-    $('hint').textContent = 'copy it into the pen\'s songs folder, then unplug';
+    hintEl.textContent = MODES[job].done;
   } catch (err) {
     log('! ' + err.message, 'l-err');
     setStatus('failed');
+  } finally {
     goBtn.disabled = false;
+    for (const btn of Object.values(modeBtns)) btn.disabled = false;
   }
 });
 
 keySel.addEventListener('change', () => {
-  $('hint').textContent = keySel.value === 'CommonI2'
+  if (mode !== 'convert') return;
+  hintEl.textContent = keySel.value === 'CommonI2'
     ? 'the default on every pen tested so far'
     : 'newer pens; decrypt a stock .rav to confirm';
 });
+
+setMode('convert');
 </script>
 </body>
 </html>
