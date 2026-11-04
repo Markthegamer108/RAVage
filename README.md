@@ -1,4 +1,4 @@
-# RAVage: tiptoi `.rav` audio converter
+﻿# RAVage: tiptoi `.rav` audio converter
 
 **English** · [Deutsch](README.de.md)
 
@@ -15,7 +15,7 @@ original pen files. Far as we can tell, this is the first working
 implementation. The community wrote the format off as "serious crypto" about
 ten years ago ([issue #115](https://github.com/entropia/tip-toi-reveng/issues/115)).
 
-![GUI](docs/gui.png)
+![GUI](docs/ravage/gui.png)
 
 ## Checking the pen
 
@@ -23,8 +23,8 @@ Before converting, RAVage writes a tiny `test.rav` file to the pen. Unplug the
 pen, use its player to play the file, and listen for five beeps. The test tries
 both pen variants so the right one gets used for the real file.
 
-![CommonID pen test](docs/gui-test-commonid.png)
-![CommonI2 pen test](docs/gui-test-commoni2.png)
+![CommonID pen test](docs/ravage/gui-test-commonid.png)
+![CommonI2 pen test](docs/ravage/gui-test-commoni2.png)
 
 ## Ready-made builds
 

@@ -1,4 +1,4 @@
-# RAVage: tiptoi-`.rav`-Audio-Konverter
+﻿# RAVage: tiptoi-`.rav`-Audio-Konverter
 
 [English](README.md) · **Deutsch**
 
@@ -17,7 +17,7 @@ Implementierung. Die Community hatte das Format vor ~10 Jahren als
 „ernsthafte Crypto“ abgehakt
 ([Issue #115](https://github.com/entropia/tip-toi-reveng/issues/115)).
 
-![GUI](docs/gui.png)
+![GUI](docs/ravage/gui.png)
 
 ## Fertige Programme
 

@@ -37,5 +37,5 @@ const result = JavaScriptObfuscator.obfuscate(raw, {
   unicodeEscapeSequence: false,
 });
 
-await writeFile('../docs/app.js', result.getObfuscatedCode(), 'utf8');
-console.log('docs/app.js', (await readFile('../docs/app.js', 'utf8')).length, 'chars');
+await writeFile('../docs/ravage/app.js', result.getObfuscatedCode(), 'utf8');
+console.log('docs/ravage/app.js', (await readFile('../docs/ravage/app.js', 'utf8')).length, 'chars');

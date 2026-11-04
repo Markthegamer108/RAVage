@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WiiWave: Mario Kart Wii, online again</title>
+<meta name="description" content="A community server for Mario Kart Wii's Nintendo WFC. Weekly leagues, seasons and events, with live standings.">
+<meta name="theme-color" content="#0a0a0b">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230a0a0b'/%3E%3Cpath d='M7 24V8h3.2l5.8 9.2L21.800 8H25v16h-3V13.400l-5.200 8.200h-1.600L10 13.400V24H7z' fill='%23ff6a3d'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/RAVage/site.css">
+</head>
+<body>
+<header class="nav" id="nav">
+  <div class="wrap nav__in">
+    <a class="brand" href="/RAVage/"><span class="brand__mark">M</span> Markthegamer108</a>
+    <nav class="nav__links" aria-label="Projects">
+      <a href="/RAVage/shroombrew/">Shroombrew</a>
+      <a href="/RAVage/wiiwave/" aria-current="page" style="color:var(--text)">WiiWave</a>
+      <a href="/RAVage/ravage/">RAVage</a>
+      <a class="nav__repo" href="https://github.com/Markthegamer108">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="wrap hero">
+    <h1>Mario Kart Wii,<br>back <em>online</em>.</h1>
+    <p class="lede">WiiWave keeps Nintendo WFC going for Mario Kart Wii: ranked races, a weekly league, seasons and events. Players run it for players.</p>
+    <div class="hero__note"><span><i></i>Patched disc needed</span><span><i></i>European WFC</span><span class="status-pill" id="status-pill"><i></i><span id="status-text">checking</span></span></div>
+    <p class="hero-meta lede" id="hero-meta" style="margin-top:18px;font-size:.95rem">Contacting the server.</p>
+  </section>
+
+  <section class="wrap sec" id="status">
+    <div class="rail"><b>01</b>Status</div>
+    <div>
+      <div class="bar"><h2 style="margin:0">This week</h2><span class="stamp" id="updated"></span></div>
+      <div class="stats">
+        <div class="stat" id="card-week"><span class="stat__label">League week</span><span class="stat__value" data-value>&ndash;</span><span class="stat__sub" data-sub>waiting for data</span></div>
+        <div class="stat" id="card-season"><span class="stat__label">Season</span><span class="stat__value" data-value>&ndash;</span><span class="stat__sub" data-sub>waiting for data</span></div>
+        <div class="stat" id="card-event"><span class="stat__label">Event of the week</span><span class="stat__value" data-value>&ndash;</span><span class="stat__sub" data-sub>waiting for data</span></div>
+        <div class="stat" id="card-stage"><span class="stat__label">Championship</span><span class="stat__value" data-value>&ndash;</span><span class="stat__sub" data-sub>waiting for data</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap sec" id="standings">
+    <div class="rail"><b>02</b>Standings</div>
+    <div>
+      <div class="bar"><div class="tabs" role="tablist"><button class="tab active" data-tab="week" role="tab">Week</button><button class="tab" data-tab="stage" role="tab">Stage</button><button class="tab" data-tab="championship" role="tab">Championship</button></div>
+        <button class="btn" id="refresh-standings">Refresh</button></div>
+      <p class="note-line" id="standings-note" style="font-size:13px;color:var(--muted-2)">Loading.</p>
+      <table class="tbl standings"><thead><tr><th>#</th><th>Player</th><th>Score</th><th>Races</th></tr></thead><tbody id="standings-body"></tbody></table>
+      <div class="pager"><button class="btn" id="prev-page">&laquo; Prev</button><span id="page-info"></span><button class="btn" id="next-page">Next &raquo;</button></div>
+    </div>
+  </section>
+
+  <section class="wrap sec" id="player">
+    <div class="rail"><b>03</b>Player</div>
+    <div>
+      <h2>Look up a player</h2>
+      <p>Only a full 12-digit friend code shows a player's own ranks. Everyone else is masked to the last four digits in the tables.</p>
+      <form id="player-form" class="player-form"><input id="player-code" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="1234-5678-9012" maxlength="14"><button class="btn btn--solid" type="submit">Search</button></form>
+      <div id="player-result" class="player-result hidden"></div>
+    </div>
+  </section>
+
+  <section class="wrap sec" id="howto">
+    <div class="rail"><b>04</b>How to play</div>
+    <div>
+      <h2>Getting on</h2>
+      <ol class="steps">
+        <li><h3>Patch your disc</h3><p>Use a Mario Kart Wii disc you own and the WiiWave patcher (<code>wiiwave.py</code>). It rewrites the Nintendo WFC addresses so the game talks to this server.</p></li>
+        <li><h3>Connect</h3><p>On the Wii, open Mario Kart Wii and choose Nintendo WFC. The patched game finds the server by itself, so there is no DNS or proxy to set up.</p></li>
+        <li><h3>Race</h3><p>Every ranked race is reported to the league. The weekly, stage and championship tables on this page update every minute.</p></li>
+      </ol>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__in">
+      <div class="footer__brand">
+        <a class="brand" href="/RAVage/"><span class="brand__mark">M</span> Markthegamer108</a>
+        <p>Shroombrew, WiiWave and RAVage. Independent hobby projects.</p>
+      </div>
+      <div class="footer__cols">
+        <div class="footer__col"><h3>Projects</h3>
+          <a href="/RAVage/shroombrew/">Shroombrew</a><a href="/RAVage/wiiwave/">WiiWave</a><a href="/RAVage/ravage/">RAVage</a></div>
+        <div class="footer__col"><h3>Source</h3>
+          <a href="https://github.com/Markthegamer108/wii-shroombrew-channel">Shroombrew</a>
+          <a href="https://github.com/Markthegamer108/RAVage">RAVage</a>
+          <a href="https://github.com/Markthegamer108">All repositories</a></div>
+      </div>
+    </div>
+    <p class="footer__legal">Not affiliated with, endorsed by or connected to Nintendo or Ravensburger. Wii, Mario Kart Wii, Nintendo WFC, tiptoi and Ravensburger belong to their owners.</p>
+  </div>
+</footer>
+<script>window.WIIWAVE_API_BASE = "";</script>
+<script src="app.js"></script>
+</body>
+</html>
